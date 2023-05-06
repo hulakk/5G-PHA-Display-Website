@@ -35,6 +35,7 @@
       1. 也是没效果图，但是README文档较为详细
 3. 文本预处理
    1. 前期的文本预处理(数据清理等)可以参考：https://blog.csdn.net/HUXINY/article/details/120014115
+      2. 这个也可以：http://t.csdn.cn/yRws8
    2. 评论的标记：
    3. 中文分词：“借鉴” https://github.com/fxsjy/jieba
    4. 去除停用词：“借鉴” https://github.com/goto456/stopwords

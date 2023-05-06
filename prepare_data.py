@@ -1,30 +1,14 @@
-# 以下代码是没有意义的测试
-# 可以删掉
-
-
-
 # 导入需要打标的数据及评论
-import re
-import pickle
-import random
+
 import pandas as pd
+import re
+import jieba.posseg as psg
 import numpy as np
 import jieba
-
 import matplotlib.pyplot as plt
 import seaborn as sns
-from wordcloud import WordCloud, STOPWORDS
-
-from sklearn.svm import SVC
-from sklearn import preprocessing, decomposition, model_selection, metrics, pipeline
-from sklearn.model_selection import GridSearchCV
-from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
-from sklearn.decomposition import TruncatedSVD
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report
 from sklearn.naive_bayes import MultinomialNB as MNB
-from sklearn.model_selection import train_test_split
 from imblearn.over_sampling import SMOTE
 from sklearn.feature_extraction.text import TfidfVectorizer as TFIV
 from sklearn.feature_selection import SelectKBest, chi2
@@ -32,6 +16,16 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
 from sklearn.svm import LinearSVC
 from sklearn.metrics import confusion_matrix
+
+
+# 正则表达式导入
+def makePattern():
+    with open('./prepareFile/pattern.txt', 'r') as f:
+        # 读取一行，同时把回车符合换成'|'
+        pattern_string = f.read().replace('\n', '|')
+        pattern = re.compile(pattern_string)
+    return pattern
+
 
 # 数据审核及矫正
 def DataOverview(data):
@@ -68,135 +62,112 @@ def SetLabel(score):
     else:
         return 0
 
-def sample_balabce(X, y):
 
+def sample_balabce(X, y):
     model_smote = SMOTE()
     x_smote_resamples, y_smote_resamples = model_smote.fit_resample(X, y)
     return x_smote_resamples, y_smote_resamples
 
 
-
 def main():
-    with open('./data/京东评论数据.csv', 'r', encoding='utf-8') as f:
+    with open('./data/JD/iphone13/1.csv', 'r', encoding='gbk') as f:
         data = pd.read_csv(f)
 
-    # DataOverview(data)
+    # 评论去重
+    print("数据的规模(行, 列):", data.shape)  #
+    dataf = data
+    # 删除数据记录中所有列值相同的记录
+    print("重复的行数:", data[['content']].duplicated().sum())
+    data = data[['content']].drop_duplicates()  # (n, 1)
 
-    MissingView(data)
+    content = data['content']  # (n,)
 
-    # 计算数据集中’score’列中每个值的出现次数
-    data['score'].value_counts()
-    # 然后用这些计数绘制一个条形图
-    sns.countplot(data=data, x='score')
+    # 编译匹配模式
+    pattern = makePattern()
+    # re.sub用于替换字符串中的匹配项
+    content = content.apply(lambda x: pattern.sub('', x))
 
-    # 数据转化
-    data['creation_time'] = pd.to_datetime(data['creation_time'])
-    data['reference_time'] = pd.to_datetime(data['reference_time'])
+    # 自定义简单的分词函数
+    worker = lambda s: [[x.word, x.flag] for x in psg.cut(s)]  # 单词与词性
+    seg_word = content.apply(worker)
 
-    data['year'] = data.creation_time.dt.year
-    data['month'] = data.creation_time.dt.month
-    data['weekday'] = data.creation_time.dt.weekday
-    data['hour'] = data.creation_time.dt.hour
+    # 将词语转化为数据框形式，一列是词，一列是词语所在的句子id，最后一列是词语在该句子中的位置
+    # 每一评论中词的个数
+    n_word = seg_word.apply(lambda x: len(x))
+    # 构造词语所在的句子id
+    n_content = [[x + 1] * y for x, y in zip(list(seg_word.index), list(n_word))]
+    # 将嵌套的列表展开，作为词所在评论的id
+    index_content = sum(n_content, [])
+
+    seg_word = sum(seg_word, [])
+    # 词
+    word = [x[0] for x in seg_word]
+    # 词性
+    nature = [x[1] for x in seg_word]
+    # content_type评论类型
+    score = [[x] * y for x, y in zip(list(dataf['score']), list(n_word))]
+    score = sum(score, [])
+
+    # 构造数据框
+    result = pd.DataFrame({'index_content': index_content,
+                           'word': word,
+                           'nature': nature,
+                           'score': score})
+
+    print(result)
+
+    # 删除标点符号
+    result = result[result['nature'] != 'x']
+
+    print(result)
+
+    # 删除停用词
+    # 加载停用词
+    stop_path = open('./data/哈工大停用词表.txt', 'r', encoding='gbk')
+    stop = [x.replace('\n', '') for x in stop_path.readlines()]
+    # 得到非停用词序列
+    word = list(set(word) - set(stop))
+    # 判断表格中的单词列是否在非停用词列中
+    result = result[result['word'].isin(word)]
+    print(result)
+
+    # 构造各词在评论中的位置列
+    n_word = list(result.groupby(by=['index_content'])['index_content'].count())
+    index_word = [list(np.arange(0, x)) for x in n_word]
+    index_word = sum(index_word, [])
+    result['index_word'] = index_word
+    result.reset_index(drop=True, inplace=True)
+    print(result)
+
+    # 提取含名词的评论的句子id
+    ind = result[[x == 'n' for x in result['nature']]]['index_content'].unique()
+    # 提取评论
+    result = result[result['index_content'].isin(ind)]
+    # 重置索引
+    result.reset_index(drop=True, inplace=True)
+    print(result)
+
+    from wordcloud import WordCloud
+    import matplotlib.pyplot as plt
+
+    # 按word分组统计数目
+    frequencies = result.groupby(by=['word'])['word'].count()
+    # 按数目降序排序
+    frequencies = frequencies.sort_values(ascending=False)
+    # 从文件中将图像读取为数组
+    backgroud_Image = plt.imread('./data/cloud.png')
+    wordcloud = WordCloud(font_path="C:/Windows/Fonts/simfang.ttf",  # 这里的字体要与自己电脑中的对应
+                          max_words=100,  # 选择前100词
+                          background_color='white',  # 背景颜色为白色
+                          mask=backgroud_Image).fit_words(frequencies)
+    # 将数据展示到二维图像上
+    plt.imshow(wordcloud)
+    # 关掉x,y轴
+    plt.axis('off')
     plt.show()
-    # 观测每周评论数数据变化情况
-    fig1, ax1 = plt.subplots(figsize=(14, 4))
-    df = data.groupby(['hour', 'weekday']).count()['nickname'].unstack()
-    df.plot(ax=ax1, style='-.')
-    plt.show()
 
-    # 评论的长短可以看出评论者的认真程度
-    data['content_len'] = data['content'].str.len()
-    fig2, ax2 = plt.subplots()
-    sns.boxplot(x='score', y='content_len', data=data, ax=ax2)
-    ax2.set_ylim(0, 600)
-    plt.show()
-
-    # stopwords = stopwordslist(r'D:\分析实战\京东评论文本挖掘\data\哈工大停用词表.txt')
-    # comment = getcomment(r"D:\分析实战\京东评论文本挖掘\data\京东评论数据.csv")
-    #
-    # print('停用词点', stopwords[:3])
-    # print('语料信息：', comment[:3])
-
-    ########################################### 文本预处理
-    # 提取需处理的数据及标签
-    data1 = data[['content', 'score']]
-    data1.info()
-
-    # 获取停用词
-    with open('./data/哈工大停用词表.txt', 'r', encoding='gbk') as file:
-        word_list = [x.strip() for x in file.readlines()]
-
-    data1['score'] = data1['score'].map(lambda x: SetLabel(x))
-    # 分词函数 把文本通过空格形式分词
-    data1['seg_words'] = data1['content'].apply(lambda x: ' '.join(jieba.cut(x)))
-
-
-    # 特征选取
-    # 数据集拆分为语料、标签
-    terms = data1['seg_words'].tolist()
-    y = data1['score'].tolist()
-
-
-    # 初始化TFIV对象，去停用词，加2元语言模型
-    tfv = TFIV(min_df=3, max_features=None, strip_accents='unicode', analyzer='word', token_pattern=r'\w{1,}',
-               ngram_range=(1, 2), use_idf=1, smooth_idf=1, sublinear_tf=1, stop_words=word_list)
-
-    tfv.fit(terms)
-    X_all = tfv.transform(terms)
-
-    # 分类模型前的特征选择：将文本进行特征表示后，还进行特征选择，选出较优的特征。这一步操作可以有效特省模型性能，改善模型。本次模型选用卡方检验选取100个特征
-    # 特征选择
-
-    select_feature_model = SelectKBest(chi2, k=100)  ##卡方检验来选择100个最佳特征
-    X_all = select_feature_model.fit_transform(X_all, y)  # 减少特征的数量，达到降维的效果，从而使模型的方法能力更强，降低过拟合的风险
-
-    ###################################  模型建立与选择
-    # 使用机器学习去做情感分析。特征值是评论文本经过TF-IDF处理的向量，标签值评论分类为1（好评）、0（差评）。主要选取模型有：朴素贝叶斯、逻辑回归、SVM。对比下模型拟合效果
-    # 切分测试集、训练集
-
-    x_train, x_test, y_train, y_test = train_test_split(X_all, y, random_state=0, test_size=0.25)
-
-    # 朴素贝叶斯
-    model_NB = MNB()
-    model_NB.fit(x_train, y_train)  # 特征数据直接灌进来
-    MNB(alpha=1.0, class_prior=None, fit_prior=True)  # ”alpha“是平滑参数，不需要掌握哈。
-
-
-    # 评估预测性能，减少过拟合
-    print("贝叶斯分类器20折交叉验证得分: ",
-          np.mean(cross_val_score(model_NB, x_train, y_train, cv=20, scoring='roc_auc')))
-
-    model_LR = LogisticRegression(C=.01)  # C是正则化系数。
-    model_LR.fit(x_train, y_train)
-    print("20折交叉验证得分: ", np.mean(cross_val_score(model_LR, x_train, y_train, cv=20, scoring='roc_auc')))
-
-
-    model_SVM = LinearSVC(C=.01)  # C是正则化系数。
-    model_SVM.fit(x_train, y_train)
-    print("20折交叉验证得分: ", np.mean(cross_val_score(model_SVM, x_train, y_train, cv=20, scoring='roc_auc')))
-
-    model_LR = LogisticRegression(C=.01)  # C是正则化系数。
-    model_LR.fit(x_train, y_train)
-    print("20折交叉验证得分: ", np.mean(cross_val_score(model_LR, x_train, y_train, cv=20)))
-
-    # 查看此时的混淆矩阵
-    y_predict = model_SVM.predict(x_test)
-    cm = confusion_matrix(y_test, y_predict)
-    print(cm)
-
-    rex, rey = sample_balabce(X_all, y)
-    rex_train, rex_test, rey_train, rey_test = train_test_split(rex, rey,
-                                                                random_state=0, test_size=0.25)
-
-    # 使用过采样样本(简单复制)进行模型训练，并查看准确率
-    model_SVM = LinearSVC(C=.01)  # C是正则化系数。
-    model_SVM.fit(rex_train, rey_train)
-    print("20折交叉验证得分: ", np.mean(cross_val_score(model_SVM, rex_train, rey_train, cv=20, scoring='roc_auc')))
-
-    # 查看此时的混淆矩阵
-    rey_predict = model_SVM.predict(rex_test)
-    cm = confusion_matrix(rey_test, rey_predict)
-    print(cm)
+    # 将结果写出
+    result.to_csv("./outputFile/word.csv", index=False, encoding='gbk')
 
 
 if __name__ == "__main__":
