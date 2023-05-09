@@ -1,1 +1,4 @@
 .idea/
+website-src/.*
+website-src/node_modules/
+website-src/dist/
