@@ -1,6 +1,5 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
-module.exports = {
+export default defineNuxtConfig({
   generate: {
-    dir:'5G-PHA-Display-Website'
+    dir: '12345'
   }
-}
+})
