@@ -1,4 +1,4 @@
-.idea/
-website-src/.*
-website-src/node_modules/
-website-src/dist/
+dist/
+.*
+!.gitignore
+node_modules/
