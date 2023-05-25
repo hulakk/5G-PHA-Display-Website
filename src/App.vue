@@ -1,73 +1,53 @@
-<script lang="ts" setup>
-import { resolve } from 'path';
-
-
-//export default {
-//   data: () => ({
-//     gridData: [
-//       { name: '优点云图', imgURL: "/5G-PHA-Display-Website/images/advantagesCloud.png", id: 'img1' },
-//       { name: '缺点云图', imgURL: "/5G-PHA-Display-Website/images/disadvantagesCloud.png", id:'img2' },
-//       { name: '关键词云图', imgURL: "/5G-PHA-Display-Website/images/wordcloud.png", id:'img3' },
-//       { name: '评分图', imgURL: "/5G-PHA-Display-Website/images/stars.png", id:'img4' }
-//     ]
-//   })
-//}
-</script>
-
 <template>
-  <div id="main">
-    <h1 id="dev_hint">······开发中······</h1>
+  <el-config-provider namespace="ep">
+    <BaseHeader />
+    <div id="main">
+      <h1 id="dev_hint">······开发中······</h1>
+      <!-- <el-backtop :right="100" :bottom="100" /> -->
 
-    <el-carousel :interval="4000" type="card" height="200px">
-    <el-carousel-item v-for="item in 6" :key="item">
-      <h3 text="2xl" justify="center">{{ item }}</h3>
-      </el-carousel-item>
-    </el-carousel>
+      <el-carousel :interval="4000" type="card" height="200px">
+        <el-carousel-item v-for="item in 6" :key="item">
+          <h3 text="2xl" justify="center">{{ item }}</h3>
+        </el-carousel-item>
+      </el-carousel>
 
-    <el-table :data="tableData" style="width: 100%">
-      <el-table-column prop="date" label="Date" width="180" />
-      <el-table-column prop="name" label="Name" width="180" />
-      <el-table-column prop="address" label="Address" />
-    </el-table>
-
-    <table id="result">
-      <tr>
-        <th class="name">优点云图</th>
-        <th class="img"><img src="/images/advantagesCloud.png" alt='优点云图加载失败' id="img1"/></th>
-      </tr>
-      <tr>
-        <th class="name">缺点云图</th>
-        <th class="img"><img src="/images/disadvantagesCloud.png" alt='缺点云图加载失败' id="img2"/></th>
-      </tr>
-      <tr>
-        <th class="name">关键词云图</th>
-        <th class="img"><img src="/images/wordcloud.png" alt='关键词云图加载失败' id="img3"/></th>
-      </tr>
-      <tr>
-        <th class="name">评分图</th>
-        <th class="img"><img src="/images/stars.png" alt='评分图加载失败' id="img4"/></th>
-      </tr>
-    </table>
-
-
-    <!-- <table v-for="item in gridData" id="result">
-      <tr>
-        <th class="name">
-          {{ item.name }}
-        </th>
-        <th class="img">
-          <img :src="item.imgURL" :alt='item.name+"加载失败"' :id="item.id"/>  
-        </th>
-      </tr>
-    </table> -->
-  </div>
-  
+      <el-tabs type="border-card">
+        <el-tab-pane name="first">
+          <template #label>
+            <h1 class="el-collapse-item-title">优点云图</h1>
+          </template>
+          <el-image src="/images/advantagesCloud.png" fit="cover"/>
+        </el-tab-pane>
+        <el-tab-pane name="second">
+          <template #label>
+            <h1 class="el-collapse-item-title">缺点云图</h1>
+          </template>
+          <el-image src="/images/disadvantagesCloud.png" fit="cover"/>
+        </el-tab-pane>
+        <el-tab-pane name="third">
+          <template #label>
+            <h1 class="el-collapse-item-title">关键词云图</h1>
+          </template>
+          <el-image src="/images/wordcloud.png" fit="cover" />
+        </el-tab-pane>
+        <el-tab-pane name="forth">
+          <template #label>
+            <h1 class="el-collapse-item-title">评分图</h1>
+          </template>
+          <el-image src="/images/stars.png" fit="cover" />
+        </el-tab-pane>
+      </el-tabs>
+    </div>
+    </el-config-provider>
 </template>
-<script>
-  
-</script>
 
-<style scoped>
+<style>
+.demo-tabs > .el-tabs__content {
+  padding: 32px;
+  color: #6b778c;
+  font-size: 32px;
+  font-weight: 600;
+}
 .el-carousel__item h3 {
   color: #475669;
   opacity: 0.75;
@@ -86,9 +66,10 @@ import { resolve } from 'path';
 div#main{
   width: 100%;
   left:0;
-  top:0;
+  /* top:0; */
   position: absolute;
   text-align: center;
+  font-family: "STXingkai","Microsoft YaHei";
 }
 h1#dev_hint{
     text-align: center;
@@ -96,32 +77,30 @@ h1#dev_hint{
     font-family: "STCaiyun","Microsoft YaHei";
     font-size: 50px;
 }
-table#result{
-  width:100%;
-  text-align: center;
-  border-collapse: collapse !important;
-  border-style:groove;
-  border-width: 8px;
-  border-color: silver;
-}
-table#result th.name{
-  width:30%;
-  text-align: center;
-  font-family: "STXingkai","Microsoft YaHei";
-  font-size: 50px;
-  border-collapse: collapse !important;
-  border-right-style: groove;
-  border-bottom-style: groove;
-  border-width: 8px;
-}
-table#result th.img{
-  width:70%;
-  text-align: center;
-  border-collapse: collapse !important;
-  border-bottom-style: groove;
-  border-width: 8px;
-}
-table#result th.img img{
-  width:90%;
-}
 </style>
+
+
+
+<!-- <template>
+  <el-config-provider namespace="ep">
+    <BaseHeader />
+    <div class="flex main-container">
+      <BaseSide />
+      <div w="full" py="4">
+        <Logos my="4" />
+        <HelloWorld msg="Hello Vue 3 + Element Plus + Vite" />
+      </div>
+    </div>
+  </el-config-provider>
+</template>
+
+<style>
+#app {
+  text-align: center;
+  color: var(--ep-text-color-primary);
+}
+
+.main-container {
+  height: calc(100vh - var(--ep-menu-item-height) - 3px);
+}
+</style> -->
