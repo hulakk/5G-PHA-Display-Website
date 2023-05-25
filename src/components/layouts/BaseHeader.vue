@@ -1,5 +1,16 @@
 <script lang="ts" setup>
 import { toggleDark } from "~/composables";
+// import { h, ref } from 'vue';
+// import { ElMessageBox } from 'element-plus';
+// export const info = () => {
+//     ElMessageBox({
+//         title: 'Information',
+//         message: h('p', null, [
+//         h('span', null, 'Message can be '),
+//         h('i', { style: 'color: teal' }, 'VNode'),
+//         ]),
+//     })
+// }
 </script>
 
 <template>

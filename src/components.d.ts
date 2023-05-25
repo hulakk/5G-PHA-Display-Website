@@ -18,7 +18,6 @@ declare module '@vue/runtime-core' {
     ElDescriptions: typeof import('element-plus/es')['ElDescriptions']
     ElDescriptionsItem: typeof import('element-plus/es')['ElDescriptionsItem']
     ElIcon: typeof import('element-plus/es')['ElIcon']
-    ElImage: typeof import('element-plus/es')['ElImage']
     ElMenu: typeof import('element-plus/es')['ElMenu']
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
@@ -27,5 +26,8 @@ declare module '@vue/runtime-core' {
     ElTag: typeof import('element-plus/es')['ElTag']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     Logos: typeof import('./components/Logos.vue')['default']
+  }
+  export interface ComponentCustomProperties {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }

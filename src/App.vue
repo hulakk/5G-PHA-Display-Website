@@ -1,12 +1,5 @@
 <script>
-import { computed, ref } from 'vue'
-import {
-  Iphone,
-  Location,
-  OfficeBuilding,
-  Tickets,
-  User,
-} from '@element-plus/icons-vue'
+
 </script>
 <template>
   <el-config-provider namespace="ep">
@@ -84,25 +77,25 @@ import {
           <template #label>
             <h1>优点云图</h1>
           </template>
-          <el-image src="/images/advantagesCloud.png" fit="cover"/>
+          <img v-loading="loading" src="/images/advantagesCloud.png" fit="cover"/>
         </el-tab-pane>
         <el-tab-pane name="second">
           <template #label>
             <h1>缺点云图</h1>
           </template>
-          <el-image src="/images/disadvantagesCloud.png" fit="cover"/>
+          <img v-loading="loading" src="/images/disadvantagesCloud.png" fit="cover"/>
         </el-tab-pane>
         <el-tab-pane name="third">
           <template #label>
             <h1>关键词云图</h1>
           </template>
-          <el-image src="/images/wordcloud.png" fit="cover" />
+          <img v-loading="loading" src="/images/wordcloud.png" fit="cover" />
         </el-tab-pane>
         <el-tab-pane name="forth">
           <template #label>
             <h1>评分图</h1>
           </template>
-          <el-image src="/images/stars.png" fit="cover" />
+          <img v-loading="loading" src="/images/stars.png" fit="cover" />
         </el-tab-pane>
       </el-tabs>
     </div>
