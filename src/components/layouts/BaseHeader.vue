@@ -6,7 +6,7 @@ import { toggleDark } from "~/composables";
   <el-menu class="el-menu-demo" mode="horizontal">
     <el-menu-item index="1">5G手机评价分析</el-menu-item>
     <el-sub-menu index="2">
-      <template #title>BBB</template>
+      <template #title>AAAAA</template>
       <el-menu-item index="2-1">item one</el-menu-item>
       <el-menu-item index="2-2">item two</el-menu-item>
       <el-menu-item index="2-3">item three</el-menu-item>
