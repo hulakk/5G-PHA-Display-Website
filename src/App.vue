@@ -3,8 +3,11 @@
 </script>
 <template>
   <el-config-provider namespace="ep">
+
     <BaseHeader />
+
     <h1 id="dev_hint">······开发中······</h1>
+
     <el-descriptions
       class="margin-top"
       title=""
@@ -63,25 +66,32 @@
       </template>
       <el-tag size="large">1111</el-tag>
     </el-descriptions-item>
-  </el-descriptions>
+    </el-descriptions>
+
     <div id="main">
       <el-backtop :right="100" :bottom="100" />
+
       <el-carousel :interval="5000" arrow="always">
         <el-carousel-item v-for="item in 4" :key="item">
-          <h3 text="2xl" justify="center">{{ item }}</h3>
+          <h3 text="2xl" justify="center">占位符{{ item }}</h3>
         </el-carousel-item>
       </el-carousel>
 
       <el-tabs type="border-card">
+        <el-tab-pane name="first" disabled>
+          <template #label>
+            <h2>结 果 展 示</h2>
+          </template>
+        </el-tab-pane>
         <el-tab-pane name="first">
           <template #label>
-            <h1>优点云图</h1>
+            <h1>好评词云</h1>
           </template>
           <img v-loading="loading" src="/images/advantagesCloud.png" fit="cover"/>
         </el-tab-pane>
         <el-tab-pane name="second">
           <template #label>
-            <h1>缺点云图</h1>
+            <h1>差评词云</h1>
           </template>
           <img v-loading="loading" src="/images/disadvantagesCloud.png" fit="cover"/>
         </el-tab-pane>
@@ -93,17 +103,18 @@
         </el-tab-pane>
         <el-tab-pane name="forth">
           <template #label>
-            <h1>评分图</h1>
+            <h1>星级统计图</h1>
           </template>
           <img v-loading="loading" src="/images/stars.png" fit="cover" />
         </el-tab-pane>
       </el-tabs>
     </div>
+
     </el-config-provider>
 </template>
 
 <style>
-.demo-tabs > .el-tabs__content {
+/* .demo-tabs > .el-tabs__content {
   padding: 32px;
   color: #6b778c;
   font-size: 32px;
@@ -124,7 +135,7 @@
 
 .el-carousel__item:nth-child(2n + 1) {
   background-color: #d3dce6;
-}
+} */
 div#main{
   width: 100%;
   left:0;
