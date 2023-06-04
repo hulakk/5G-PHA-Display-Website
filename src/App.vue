@@ -101,8 +101,10 @@ const phonephoto={
         </table>
       </div>
 
-      <div>
+      <div style="font-family:SimSun;">
         <el-image v-if="phonephoto.hasOwnProperty(s_mn)" v-loading="loading" :src="phonephoto[s_mn]" fit="scale-down"/>
+        <!-- <el-empty v-else-if="s_mn===''" description="请先选择机型" />
+        <el-empty v-else description="该机型无图片" /> -->
       </div>
 
       
@@ -126,10 +128,10 @@ const phonephoto={
             <p>后摄主像素：{{ phoneparameters[s_mn].bc_pixel }}</p>
           </div>
           <div v-else-if="s_mn===''" class="result">
-            <el-text type="warning" size="large">提示：请先在上方选择机型</el-text>
+            <el-empty description="提示：请先在上方选择机型" />
           </div>
           <div v-else class="result">
-            <el-text type="warning" size="large">对应机型暂无内容</el-text>
+            <el-empty description="该机型暂无参数" />
           </div>
         </el-tab-pane>
 
@@ -154,16 +156,17 @@ const phonephoto={
               <el-image v-loading="loading" :src="cloudpath[s_mn].da_imgpath" fit="scale-down"/>
             </div>
             <div v-else class="result">
-              <el-text type="warning" size="large">对应词云类型暂无图片</el-text>
+              <el-empty description="对应词云类型暂无" />
             </div>
           </div>
 
           <div v-else-if="s_mn===''" class="result">
-            <el-text type="warning" size="large">提示：请先在上方选择机型</el-text>
+            <el-empty description="提示：请先在上方选择机型" />
           </div>
 
           <div v-else class="result">
-            <el-text type="warning" size="large">对应机型暂无图片</el-text>
+            <!-- <el-text type="warning" size="large">该机型暂无图片</el-text> -->
+            <el-empty description="该机型暂无词云" />
           </div>
         </el-tab-pane>
 
@@ -181,10 +184,12 @@ const phonephoto={
             <el-text type="info" size="small">注：本网站所有结论均从用户评论获取，仅供参考</el-text>
           </div>
           <div v-else-if="s_mn===''" class="result">
-            <el-text type="warning" size="large">提示：请先在上方选择机型</el-text>
+            <el-empty description="提示：请先在上方选择机型" />
+            <!-- <el-empty description="提示：请先在上方选择机型" /> -->
           </div>
           <div v-else class="result">
-            <el-text type="warning" size="large">对应机型暂无内容</el-text>
+            <!-- <el-empty description="该机型暂无内容" /> -->
+            <el-empty description="该机型暂无内容" />
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -197,7 +202,7 @@ const phonephoto={
         </el-carousel-item>
       </el-carousel> -->
     </div>
-    <!-- <el-empty description="完" /> -->
+    
     <br/><br/><br/><br/><br/><br/><br/><br/>
 
     <el-container>
