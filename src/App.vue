@@ -2,33 +2,65 @@
 import { ref } from 'vue'
 
 const erb_selected=ref("erb-a")
-const s_p=ref("")
 const s_mn=ref("")
 
-const jd_mn_list=[
-  {label:'iphone13',value:'s-mn-ip13'},
+const mn_list=[
+  {label:'iPhone13',value:'s-mn-ip13'},
   {label:'机型A',value:'s-mn-a'},
   {label:'机型B',value:'s-mn-b'},
-  {label:'机型E',value:'s-mn-e'},
+  {label:'机型C',value:'s-mn-c'},
 ]
-const tb_mn_list=[
-  {label:'iphone13',value:'s-mn-ip13'},
-  {label:'机型A',value:'s-mn-a'},
-  {label:'机型B',value:'s-mn-b'},
-  {label:'机型D',value:'s-mn-d'},
-]
-const phoneparameters={
-  'ip13':{
 
+const phoneparameters={
+  's-mn-ip13': {// 此处要和mn_list里的value对应
+    fullname:'Apple iPhone 13', //全名
+    cpu:'A15',     // cpu型号
+    size:'宽71.5mm；长146.7mm；厚7.65mm',    // 机身尺寸
+    weight:'173g',  //机身重量
+    memory:'128GB',  //内存
+    screenpixel:'2532 x 1170', //屏幕分辨率
+    screensize:'6.1英寸',  // 屏幕尺寸
+    screentype:'OLED直屏',  // 屏幕材质
+    charge:'20W',      // 充电功率
+    os:'iOS',          // 系统
+    fc_pixel:'1200万像素',    // 前摄主像素
+    bc_pixel:'1200万像素',    // 后摄主像素
+  },
+  'template':{
+    fullname:'', //全名
+    cpu:'',     // cpu型号
+    size:'',    // 机身尺寸
+    weight:'',  //机身重量
+    memory:'',  //内存
+    screenpixel:'', //屏幕分辨率
+    screensize:'',  // 屏幕尺寸
+    screentype:'',  // 屏幕材质
+    charge:'',      // 充电功率
+    os:'',          // 系统
+    fc_pixel:'',    // 前摄主像素
+    bc_pixel:'',    // 后摄主像素
   }
 }
+
 const phonecomment={
-  'ip13':
+  's-mn-ip13':  // 此处要和mn_list里的value对应
     {
       advantage:'用户觉得iPhone13运行流畅、外观好看、性价比高、质量好、拍照效果好',
       disadvantage:'用户觉得iPhone13卡顿、容易发热、电池容量小、屏幕尺寸小、声音小'
     },
 
+}
+
+const cloudpath={
+  's-mn-ip13': {// 此处要和mn_list里的value对应
+    a_imgpath:'./images/iphone13/advantagesCloud.png',
+    da_imgpath:'./images/iphone13/disadvantagesCloud.png',
+  }
+}
+
+const phonephoto={
+  's-mn-ip13': // 此处要和mn_list里的value对应
+    './images/iphone13/phone.png'
 }
 </script>
 <template>
@@ -56,62 +88,48 @@ const phonecomment={
         <table>
           <tr>
             <td>
-              <el-text size="large">选择平台：</el-text>
-              <el-select v-model="s_p" placeholder="未选择" size="large">
-                <el-option label="京东" value="s-p-jd"/>
-                <el-option label="淘宝" value="s-p-tb"/>
-              </el-select>
-            </td>
-            <td>
               <el-text size="large">选择机型：</el-text>
               <el-select  v-model="s_mn" placeholder="未选择" size="large">
                 <el-option
-                  v-if="s_p==='s-p-jd'"
-                  v-for="item in jd_mn_list"
+                  v-for="item in mn_list"
                   :label="item.label"
                   :value="item.value"
                 />
-                <el-option
-                  v-else-if="s_p==='s-p-tb'"
-                  v-for="item in tb_mn_list"
-                  :label="item.label"
-                  :value="item.value"
-                />
-                <el-option v-else label="请先选择平台" disabled/>
               </el-select>
             </td>
           </tr>
         </table>
       </div>
 
+      <div>
+        <el-image v-if="phonephoto.hasOwnProperty(s_mn)" v-loading="loading" :src="phonephoto[s_mn]" fit="scale-down"/>
+      </div>
+
       
-      <el-tabs type="border-card" id="tab-pane" model-value="third">
-        <!-- <el-tab-pane name="zeroth" disabled>
-          <template #label>
-            
-            <el-tooltip
-              class="box-item"
-              effect="dark"
-              content="请点击右边的标签以查看对应的图片"
-              placement="top-start"
-            >
-            <el-text class="tab-text" type="success" size="large">结果展示</el-text>
-          </el-tooltip>
-          </template>
-        </el-tab-pane> -->
-        
+      <el-tabs type="border-card" id="tab-pane" model-value="third">  
         <el-tab-pane name="third">
           <template #label>
             <el-text class="tab-text" type="primary" size="large">手机参数</el-text>
           </template>
-          <div v-if="s_p==='s-p-jd' && s_mn==='s-mn-ip13'">
-            
+          <div v-if="phoneparameters.hasOwnProperty(s_mn)" style="font-family: 'SimSun';text-align:left;font-size:30px">
+            <p>全名：{{ phoneparameters[s_mn].fullname }}</p>
+            <p>CPU型号：{{ phoneparameters[s_mn].cpu }}</p>
+            <p>机身尺寸：{{ phoneparameters[s_mn].size }}</p>
+            <p>机身重量：{{ phoneparameters[s_mn].weight }}</p>
+            <p>内存：{{ phoneparameters[s_mn].memory }}</p>
+            <p>屏幕分辨率：{{ phoneparameters[s_mn].screenpixel }}</p>
+            <p>屏幕尺寸：{{ phoneparameters[s_mn].screensize }}</p>
+            <p>屏幕材质：{{ phoneparameters[s_mn].screentype }}</p>
+            <p>充电功率：{{ phoneparameters[s_mn].charge }}</p>
+            <p>系统：{{ phoneparameters[s_mn].os }}</p>
+            <p>前摄主像素：{{ phoneparameters[s_mn].fc_pixel }}</p>
+            <p>后摄主像素：{{ phoneparameters[s_mn].bc_pixel }}</p>
           </div>
-          <div v-else-if="s_p==='' || s_mn===''" class="result">
-            <el-text type="warning" size="large">提示：请先在上方选择平台和机型</el-text>
+          <div v-else-if="s_mn===''" class="result">
+            <el-text type="warning" size="large">提示：请先在上方选择机型</el-text>
           </div>
           <div v-else class="result">
-            <el-text type="warning" size="large">对应平台和机型暂无内容</el-text>
+            <el-text type="warning" size="large">对应机型暂无内容</el-text>
           </div>
         </el-tab-pane>
 
@@ -122,30 +140,30 @@ const phonecomment={
           </template>
 
           <!-- 京东、iPhone13 -->
-          <div v-if="s_p==='s-p-jd' && s_mn==='s-mn-ip13'" class="result">
+          <div v-if="cloudpath.hasOwnProperty(s_mn)" class="result">
             <div style="text-align: center;">
               <el-radio-group v-model="erb_selected">
-              <el-radio-button label="erb-a" size="large">优点云图</el-radio-button>
-              <el-radio-button label="erb-da" size="large">缺点云图</el-radio-button>
+              <el-radio-button label="erb-a" size="large">优点词云</el-radio-button>
+              <el-radio-button label="erb-da" size="large">缺点词云</el-radio-button>
               </el-radio-group>
             </div>
             <div v-if="erb_selected==='erb-a'" class="result">
-              <el-image v-loading="loading" src="./images/JD/iphone13/advantagesCloud.png" fit="scale-down"/>
+              <el-image v-loading="loading" :src="cloudpath[s_mn].a_imgpath" fit="scale-down"/>
             </div>
             <div v-else-if="erb_selected==='erb-da'" class="result">
-              <el-image v-loading="loading" src="./images/JD/iphone13/disadvantagesCloud.png" fit="scale-down"/>
+              <el-image v-loading="loading" :src="cloudpath[s_mn].da_imgpath" fit="scale-down"/>
             </div>
             <div v-else class="result">
               <el-text type="warning" size="large">对应词云类型暂无图片</el-text>
             </div>
           </div>
 
-          <div v-else-if="s_p==='' || s_mn===''" class="result">
-            <el-text type="warning" size="large">提示：请先在上方选择平台和机型</el-text>
+          <div v-else-if="s_mn===''" class="result">
+            <el-text type="warning" size="large">提示：请先在上方选择机型</el-text>
           </div>
 
           <div v-else class="result">
-            <el-text type="warning" size="large">对应平台和机型暂无图片</el-text>
+            <el-text type="warning" size="large">对应机型暂无图片</el-text>
           </div>
         </el-tab-pane>
 
@@ -153,38 +171,22 @@ const phonecomment={
           <template #label>
             <el-text class="tab-text" type="primary" size="large">优缺点</el-text>
           </template>
-          <div v-if="s_p==='s-p-jd' && s_mn==='s-mn-ip13'" class="result" style="text-align: left;">
+          <div v-if="phonecomment.hasOwnProperty(s_mn)" class="result" style="text-align: left;">
             <el-text>优点：</el-text><br/>
-            <p>{{ phonecomment['ip13'].advantage }}</p>
+            <p>{{ phonecomment[s_mn].advantage }}</p>
             <br/>
             <el-text>缺点：</el-text><br/>
-            <p>{{ phonecomment['ip13'].disadvantage }}</p>
+            <p>{{ phonecomment[s_mn].disadvantage }}</p>
+            <br/><br/>
+            <el-text type="info" size="small">注：本网站所有结论均从用户评论获取，仅供参考</el-text>
           </div>
-          <div v-else-if="s_p==='' || s_mn===''" class="result">
-            <el-text type="warning" size="large">提示：请先在上方选择平台和机型</el-text>
+          <div v-else-if="s_mn===''" class="result">
+            <el-text type="warning" size="large">提示：请先在上方选择机型</el-text>
           </div>
           <div v-else class="result">
-            <el-text type="warning" size="large">对应平台和机型暂无内容</el-text>
+            <el-text type="warning" size="large">对应机型暂无内容</el-text>
           </div>
         </el-tab-pane>
-
-        
-
-        <el-tab-pane name="forth">
-          <template #label>
-            <!-- <h1>星级统计图</h1> -->
-            <el-text class="tab-text" type="primary" size="large">星级统计图</el-text>
-          </template>
-            <div v-if="s_p==='s-p-jd' && s_mn==='s-mn-ip13'">
-              <el-image v-loading="loading" src="./images/JD/iphone13/stars.png" fit="scale-down" />
-            </div>
-            <div v-else-if="s_p==='' || s_mn===''" class="result">
-              <el-text type="warning" size="large">提示：请先在上方选择平台和机型</el-text>
-            </div>
-            <div v-else class="result">
-              <el-text type="warning" size="large">对应平台和机型暂无图片</el-text>
-            </div>
-          </el-tab-pane>
       </el-tabs>
 
       <el-icon><Guide /></el-icon><br/>
@@ -216,8 +218,8 @@ const phonecomment={
   text-align: center;
   font-family: 'SimSun';
   position: relative;
-  width:50%;
-  left:25%;
+  width:30%;
+  left:35%;
 }
 
 #carousel{
