@@ -1,0 +1,62 @@
+<el-descriptions
+        class="margin-top"
+        title=""
+        column="2"
+        size="large"
+        border="true"
+        labelStyle="font-size:30px"
+        contentStyle="font-size:30px"
+        id="description-table"
+        >
+      <el-descriptions-item>
+        <template #label>
+          <div class="cell-item">
+            <el-icon>
+              <user />
+            </el-icon>
+            小组成员
+          </div>
+        </template>
+        <el-tag size="large"><el-text type="primary">李嘉華</el-text></el-tag>
+        <el-tag size="large"><el-text type="primary">周骏</el-text></el-tag>
+        <el-tag size="large"><el-text type="primary">林乔瀚</el-text></el-tag>
+        <el-tag size="large"><el-text type="primary">莫森华</el-text></el-tag>
+        <el-tag size="large"><el-text type="primary">康文豪</el-text></el-tag>
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template #label>
+          <div class="cell-item">
+            <el-icon>
+              <iphone />
+            </el-icon>
+            学校
+          </div>
+        </template>
+        <el-tooltip content="点击跳转到学校官网">
+        <el-link href="https://www.scut.edu.cn/" target="_blank">华南理工大学</el-link>
+        </el-tooltip>
+        <!-- <el-text type="default" tag="ins">华南理工大学</el-text> -->
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template #label>
+          <div class="cell-item">
+            <el-icon>
+              <location />
+            </el-icon>
+            题目
+          </div>
+        </template>
+        <el-text type="default">5G手机评论分析</el-text>
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template #label>
+          <div class="cell-item">
+            <el-icon>
+              <tickets />
+            </el-icon>
+            指导老师
+          </div>
+        </template>
+        <el-tag size="large"><el-text type="primary">苏锦钿</el-text></el-tag>
+      </el-descriptions-item>
+      </el-descriptions>
