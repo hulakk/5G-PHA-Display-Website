@@ -10,7 +10,7 @@ const mn_list=[
   {label:'Galaxy A53 5G',value:'s-mn-gxa53'},
   {label:'Galaxy S22 Ultra',value:'s-mn-gxs22'},
   {label:'iPhone 14',value:'s-mn-ip14'},
-  {label:'iPhone SE',value:'s-mn-ipse3'},
+  {label:'iPhone SE3',value:'s-mn-ipse3'},
   {label:'OPPO K10x',value:'s-mn-opk10x'},
   {label:'Redmi K40S',value:'s-mn-rmk40s'},
   {label:'vivo X90',value:'s-mn-vvx90'},
@@ -51,9 +51,9 @@ const phoneparameters={
     size:'宽69.9mm；长152.7mm；厚8.16mm',    // 机身尺寸
     weight:'182g',  //机身重量
     memory:'8GB+256GB / 12GB+256GB / 12GB+512GB',  //内存
-    screenpixel:'', //屏幕分辨率
-    screensize:'',  // 屏幕尺寸
-    screentype:'',  // 屏幕材质
+    screenpixel:'2400*1080', //屏幕分辨率
+    screensize:'6.28英寸',  // 屏幕尺寸
+    screentype:'OLED',  // 屏幕材质
     charge:'67W',      // 充电功率
     os:'Android',          // 系统
     fc_pixel:'3200万像素',    // 前摄主像素
@@ -77,7 +77,7 @@ const phoneparameters={
     fullname:'三星 Galaxy S22 Ultra', //全名
     cpu:'骁龙8 Gen 1',     // cpu型号
     size:'宽77.9mm；长163.3mm；厚8.9mm',    // 机身尺寸
-    weight:'',  //机身重量
+    weight:'228g',  //机身重量
     memory:'12GB+256GB / 12GB+512GB',  //内存
     screenpixel:'3088 x 1440(QHD+)', //屏幕分辨率
     screensize:'6.8英寸',  // 屏幕尺寸
@@ -151,7 +151,7 @@ const phoneparameters={
     memory:'8GB+128GB / 8GB+256GB / 12GB+256GB / 12GB+512GB',  //内存
     screenpixel:'2800 × 1260', //屏幕分辨率
     screensize:'6.78英寸',  // 屏幕尺寸
-    screentype:'',  // 屏幕材质
+    screentype:'AMOLED',  // 屏幕材质
     charge:'120W',      // 充电功率
     os:'Android',          // 系统
     fc_pixel:'3200万像素',    // 前摄主像素
