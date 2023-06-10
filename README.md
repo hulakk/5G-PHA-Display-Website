@@ -1,6 +1,6 @@
 为方便Github Page部署，本目录设为子仓库  
 
-任何更改需先提交到https://github.com/hulakk/5G-PHA-Display-Website.git，再同步到此处  
+任何更改需先提交到[此仓库](https://github.com/hulakk/5G-PHA-Display-Website.git) ，再同步到此处  
 
 同步：  
 ```sh
