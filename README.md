@@ -9,7 +9,14 @@ git subtree pull --prefix=website-src https://github.com/hulakk/5G-PHA-Display-W
 ```
 
 修改代码或资源后，需要重新生成网页：  
+```sh
+# 方法一（强烈推荐）
+# @hulakk,让他解决
 ```
+
+```sh
+# 方法二（十分不推荐）
+
 # 1.安装node.js
 
 # 2.安装环境
